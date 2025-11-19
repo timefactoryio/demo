@@ -1,14 +1,14 @@
 services:
-  pathless:
+  pathless-demo:
     image: timefactory/pathless
-    container_name: pathless
+    container_name: pathless-demo
     restart: unless-stopped
     networks:
       - timefactory
 
-  demo:
+  frame-demo:
     image: timefactory/demo
-    container_name: demo
+    container_name: frame-demo
     restart: unless-stopped
     networks:
       - timefactory
