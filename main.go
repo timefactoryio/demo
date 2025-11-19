@@ -1,13 +1,17 @@
 package main
 
 import (
+	"os"
+
 	"github.com/timefactoryio/frame"
 )
 
 func main() {
-	f := frame.NewFrame("timefactory.io", "demo.timefactory.io")
+	pathless := os.Getenv("PATHLESS")
+	api := os.Getenv("FRAME")
 
-	f.Zero("the perpetual motion machine", "timefactoryio", "timefactoryio")
+	f := frame.NewFrame(pathless, api)
+	f.Zero("the perpetual motion machine", "timefactoryio", "")
 	f.README("./README.md", "")
 	f.BuildSlides("./slides")
 	f.AddPath("./img")
