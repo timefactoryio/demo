@@ -13,8 +13,14 @@ github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZN
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.6.1 h1:hDPOHmpOpP40lSULcqw7IrRb/u7w6RpDC9399XyoNd0=
 github.com/stretchr/testify v1.6.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
-github.com/timefactoryio/frame v0.1.5 h1:YesFl68Qgi4OtOI+q9caZFsSmAKiRWMhckVv4/LLa3Y=
-github.com/timefactoryio/frame v0.1.5/go.mod h1:QIFUEa3HXudaOp8EISgmZgAfLBgdJperR9EkrBvB+ts=
+github.com/timefactoryio/frame v0.1.14 h1:c4ECq9e8TIPU8rqngemE/R/cTWSPRXtJq14zd0VB53A=
+github.com/timefactoryio/frame v0.1.14/go.mod h1:QIFUEa3HXudaOp8EISgmZgAfLBgdJperR9EkrBvB+ts=
+github.com/timefactoryio/frame v0.1.15 h1:7eY6o5ON9KmnTYpn6v2Rmdd7VBL/+MInP0DWsL3lFLE=
+github.com/timefactoryio/frame v0.1.15/go.mod h1:QIFUEa3HXudaOp8EISgmZgAfLBgdJperR9EkrBvB+ts=
+github.com/timefactoryio/frame v0.1.16 h1:NnyOwoP4JEbXGGZMg+6SV0JqHdAwkF0HTT3cYgDCoQ4=
+github.com/timefactoryio/frame v0.1.16/go.mod h1:QIFUEa3HXudaOp8EISgmZgAfLBgdJperR9EkrBvB+ts=
+github.com/timefactoryio/frame v0.1.17 h1:qsPfMaQq/rdrM1MWoTd4x6oxvg3z2f8A1/cJRkMx4no=
+github.com/timefactoryio/frame v0.1.17/go.mod h1:QIFUEa3HXudaOp8EISgmZgAfLBgdJperR9EkrBvB+ts=
 github.com/yuin/goldmark v1.2.1/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.7.13 h1:GPddIs617DnBLFFVJFgpo1aBfe/4xcvMc3SB5t/D0pA=
 github.com/yuin/goldmark v1.7.13/go.mod h1:ip/1k0VRfGynBgxOz0yCqHrbZXhcjxyuS66Brc7iBKg=

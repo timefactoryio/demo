@@ -11,8 +11,8 @@ func main() {
 	api := os.Getenv("FRAME")
 
 	f := frame.NewFrame(pathless, api)
-	f.Zero("the perpetual motion machine", "timefactoryio", "")
-	f.README("./README.md", "")
+	f.Landing("the perpetual motion machine", "timefactoryio", "")
+	f.README("./README.md")
 	f.BuildSlides("./slides")
 	f.AddPath("./img")
 	f.Serve()
