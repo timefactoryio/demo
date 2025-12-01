@@ -7,8 +7,8 @@ import (
 )
 
 func main() {
-	pathless := os.Getenv("PATHLESS")
-	api := os.Getenv("FRAME")
+	pathless := os.Getenv("PATHLESS_URL")
+	api := os.Getenv("API_URL")
 
 	f := frame.NewFrame(pathless, api)
 	f.Landing("the perpetual motion machine", "timefactoryio", "")
