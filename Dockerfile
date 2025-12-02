@@ -4,13 +4,15 @@ WORKDIR /src
 
 ARG TARGETARCH
 
-COPY . ./
+# Copy only go.mod and go.sum for dependency resolution
+COPY go.mod go.sum ./
 
 # Cache Go modules
 RUN --mount=type=cache,target=/go/pkg/mod \
     go mod download
 
-# Build the binary
+# Copy main.go and build the binary
+COPY main.go ./
 RUN --mount=type=cache,target=/go/pkg/mod \
     CGO_ENABLED=0 GOARCH=$TARGETARCH go build -ldflags="-s -w" -o /out/demo .
 
@@ -20,6 +22,11 @@ WORKDIR /app
 
 # Copy the Go binary
 COPY --from=go_builder /out/demo /demo
+
+# Copy static files
+COPY img ./img
+COPY slides ./slides
+COPY README.md ./README.md
 
 USER 1001
 ENTRYPOINT ["/demo"]
