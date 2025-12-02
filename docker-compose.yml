@@ -12,9 +12,6 @@ services:
     image: timefactory/demo
     container_name: frame-demo
     restart: unless-stopped
-    volumes:
-      - ./img:/img
-      - ./slides:/slides
     ports:
       - 127.0.0.1:1001:1001
     networks:
