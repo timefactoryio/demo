@@ -7,8 +7,8 @@ import (
 )
 
 func main() {
-	pathless := os.Getenv("PATHLESS_URL")
-	api := os.Getenv("API_URL")
+	pathless := os.Getenv("PATHLESS_URL") // (eg. https://timefactory.io)
+	api := os.Getenv("API_URL")           // (eg. https://demo.timefactory.io)
 
 	f := frame.NewFrame(pathless, api)
 	f.README(f.ToBytes("https://raw.githubusercontent.com/timefactoryio/pathless/main/README.md"))

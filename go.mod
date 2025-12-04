@@ -2,7 +2,7 @@ module github.com/timefactoryio/demo
 
 go 1.25.5
 
-require github.com/timefactoryio/frame v0.2.12
+require github.com/timefactoryio/frame v0.2.13
 
 require (
 	github.com/felixge/httpsnoop v1.0.4 // indirect
