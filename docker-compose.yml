@@ -21,6 +21,7 @@ services:
     volumes:
       - ./img:/img
       - ./slides:/slides
+      - ./README.md:/README.md
 
 networks:
   timefactory:
