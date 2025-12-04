@@ -1,8 +1,8 @@
 module github.com/timefactoryio/demo
 
-go 1.25.4
+go 1.25.5
 
-require github.com/timefactoryio/frame v0.2.3
+require github.com/timefactoryio/frame v0.2.11
 
 require (
 	github.com/felixge/httpsnoop v1.0.4 // indirect
