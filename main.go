@@ -11,9 +11,9 @@ func main() {
 	api := os.Getenv("API_URL")
 
 	f := frame.NewFrame(pathless, api)
-	f.Landing("the perpetual motion machine", "timefactoryio", "")
 	f.README(f.ToBytes("https://raw.githubusercontent.com/timefactoryio/pathless/main/README.md"))
 	f.BuildSlides("./slides")
+	f.Landing("the perpetual motion machine", "timefactoryio", "")
 	f.AddPath("./img")
 	f.Serve()
 	select {}

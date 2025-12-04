@@ -26,7 +26,6 @@ COPY --from=go_builder /out/demo /demo
 # Copy static files
 COPY img ./img
 COPY slides ./slides
-COPY README.md ./README.md
 
 USER 1001
 ENTRYPOINT ["/demo"]
