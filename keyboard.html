@@ -1,0 +1,252 @@
+<style>
+	#keyboard-overlay {
+		position: fixed;
+		bottom: 1em;
+		right: 1em;
+		height: 40vh;
+		width: 50vh;
+		z-index: 1000;
+		pointer-events: none;
+		display: none;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		border-radius: 0.75em;
+		background: black;
+		padding: 0.5em 0.5em;
+		box-sizing: border-box;
+		border: medium solid #000000;
+	}
+	#keyboard-overlay.visible {
+		display: flex;
+	}
+	#keyboard-overlay > * {
+		pointer-events: auto;
+	}
+	.grid {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		grid-template-rows: repeat(3, 1fr);
+		gap: 0.5em;
+		width: 100%;
+		max-width: 100%;
+		height: 100%;
+		max-height: 100%;
+	}
+	.key {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		box-sizing: border-box;
+		overflow: hidden;
+		border-radius: 0.375em;
+		font-size: 1.3em;
+		color: white;
+	}
+
+	.key[data-index='0'],
+	.key[data-index='2'],
+	.key[data-index='3'],
+	.key[data-index='4'] {
+		border: medium solid #9a9494;
+	}
+
+	.key[data-index='6'],
+	.key[data-index='8'],
+	.key[data-index='9'],
+	.key[data-index='10'] {
+		border: medium solid #444;
+	}
+
+	.key[data-index='5'] {
+		border: medium solid red;
+	}
+	.key[data-index='7'] {
+		border: medium solid blue;
+	}
+	.key.top,
+	.key.bottom {
+		flex: 1 1 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border: none;
+	}
+	.key.bottom {
+		margin-bottom: 0.2em;
+	}
+	.key.pressed {
+		border-color: #fff;
+	}
+	.key:empty {
+		opacity: 0;
+		pointer-events: none;
+	}
+</style>
+
+<script>
+	(function () {
+		const container = document.getElementById('keyboard-overlay');
+		let grid = container.querySelector('.grid');
+
+		if (!grid) {
+			grid = document.createElement('div');
+			grid.className = 'grid';
+			container.appendChild(grid);
+		}
+
+		if (!grid.hasChildNodes()) {
+			const indices = [null, 2, 3, 4, 0, 5, 6, 7, null, 8, 9, 10];
+
+			indices.forEach((index) => {
+				const key = document.createElement('div');
+				key.className = 'key';
+
+				if (index !== null) {
+					key.dataset.index = index;
+					key.innerHTML = `
+                        <div class="key top"></div>
+                        <div class="key bottom"></div>
+                    `;
+				}
+				grid.appendChild(key);
+			});
+		}
+
+		const setKeyContent = (index, part, content, isHTML = false) => {
+			const key = grid.querySelector(`.key[data-index='${index}']`);
+			if (!key) return;
+
+			const el = key.querySelector(`.key.${part}`);
+			if (!el) return;
+
+			if (isHTML) {
+				el.innerHTML = content;
+			} else {
+				el.textContent = content;
+			}
+		};
+
+		const setSVGToBottom = (index, svg) =>
+			setKeyContent(index, 'bottom', svg, true);
+
+		const makeLayoutSVG = (paths = []) => {
+			const pathStr = paths.length
+				? `<path stroke="#00f" stroke-width="10" d="${paths.join(
+						''
+				  )}" />`
+				: '';
+			return `<svg xmlns="http://www.w3.org/2000/svg" width="880" height="596" viewBox="0 0 880 596">
+                <rect width="860" height="576" x="10" y="10" fill="none" stroke="#00f" stroke-width="10" rx="16"/>
+                ${pathStr}
+            </svg>`;
+		};
+
+		const layoutSVG = {
+			l0: [makeLayoutSVG()],
+			l1: [
+				makeLayoutSVG(['M440 10v576']),
+				makeLayoutSVG(['M10 298h860']),
+			],
+			l2: [
+				makeLayoutSVG(['M440 10v576M440 298h430']),
+				makeLayoutSVG(['M10 298h860M440 298v288']),
+				makeLayoutSVG(['M440 10v576M10 298h430']),
+				makeLayoutSVG(['M10 298h860M440 10v288']),
+			],
+		};
+
+		const updateLayoutSVGs = () => {
+			const { layout, prevLayout } = pathless.layout();
+			const [rows, cols] = layout;
+			const [prevRows, prevCols] = prevLayout;
+
+			if (rows === 0 && prevRows > 0) {
+				if (prevRows === 1) {
+					setSVGToBottom(2, layoutSVG.l1[prevCols]);
+				} else if (prevRows === 2) {
+					setSVGToBottom(2, layoutSVG.l2[prevCols]);
+				}
+			} else {
+				setSVGToBottom(2, layoutSVG.l0[0]);
+			}
+
+			if (rows === 1) {
+				const nextCols = (cols + 1) % 2;
+				setSVGToBottom(3, layoutSVG.l1[nextCols]);
+			} else {
+				setSVGToBottom(3, layoutSVG.l1[0]);
+			}
+
+			if (rows === 2) {
+				const nextCols = (cols + 1) % 4;
+				setSVGToBottom(4, layoutSVG.l2[nextCols]);
+			} else {
+				setSVGToBottom(4, layoutSVG.l2[0]);
+			}
+		};
+
+		const updateKeyboard = () => {
+			const keyboard = pathless.keyboard();
+			const allKeyIndices = [0, 5, 6, 7, 8, 9, 10];
+			const boundIndices = [];
+
+			// Update bound keys
+			Object.entries(keyboard).forEach(([key, binding]) => {
+				if (binding.index !== null && binding.index !== undefined) {
+					boundIndices.push(binding.index);
+					setKeyContent(binding.index, 'top', key.toUpperCase());
+					if ([2, 3, 4].includes(binding.index)) {
+						const originalOnDown = binding.onDown;
+						binding.onDown = (e) => {
+							originalOnDown?.(e);
+							updateLayoutSVGs();
+						};
+					}
+					if (
+						![2, 3, 4].includes(binding.index) &&
+						binding.data &&
+						binding.data.length > 0
+					) {
+						setKeyContent(
+							binding.index,
+							'bottom',
+							binding.data.join(', ')
+						);
+					}
+				}
+			});
+
+			allKeyIndices.forEach((index) => {
+				if (!boundIndices.includes(index)) {
+					setKeyContent(index, 'top', '');
+					setKeyContent(index, 'bottom', '');
+				}
+			});
+			updateLayoutSVGs();
+		};
+
+		// Listen for keyboard events
+		window.addEventListener('keyboardchange', (e) => {
+			const { key, pressed } = e.detail;
+			const keyboard = pathless.keyboard();
+			const binding = keyboard[key];
+
+			if (
+				binding &&
+				binding.index !== null &&
+				binding.index !== undefined
+			) {
+				const keyElement = grid.querySelector(
+					`.key[data-index='${binding.index}']`
+				);
+				if (keyElement) {
+					keyElement.classList.toggle('pressed', pressed);
+				}
+			}
+		});
+		updateKeyboard();
+		window.addEventListener('framechange', updateKeyboard);
+	})();
+</script>
