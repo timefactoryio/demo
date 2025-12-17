@@ -1,40 +1,32 @@
 package main
 
-import (
-	"fmt"
-	"path/filepath"
+// func BuildVideo(f *frame.Frame, filePath string) *zero.One {
+// 	f.AddFile(filePath, "video")
+// 	name := filepath.Base(filePath)
+// 	name = name[:len(name)-len(filepath.Ext(name))]
 
-	"github.com/timefactoryio/frame"
-	"github.com/timefactoryio/frame/zero"
-)
+// 	video := f.Video("")
+// 	css := f.CSS(f.VideoCSS())
+// 	js := f.JS(fmt.Sprintf(`
+// (async function() {
+//     const el = pathless.frame().querySelector('video');
+//     if (!el) return;
 
-func BuildVideo(f *frame.Frame, filePath string) *zero.One {
-	f.AddFile(filePath, "video")
-	name := filepath.Base(filePath)
-	name = name[:len(name)-len(filepath.Ext(name))]
+//     const { data: src } = await pathless.fetch(apiUrl + '/video/%s', { key: 'video-%s' });
+//     el.src = src;
 
-	video := f.Video("")
-	css := f.CSS(f.VideoCSS())
-	js := f.JS(fmt.Sprintf(`
-(async function() {
-    const el = pathless.frame().querySelector('video');
-    if (!el) return;
+//     el.addEventListener('loadedmetadata', () => {
+//         el.currentTime = pathless.state().t || 0;
+//     }, { once: true });
 
-    const { data: src } = await pathless.fetch(apiUrl + '/video/%s', { key: 'video-%s' });
-    el.src = src;
-
-    el.addEventListener('loadedmetadata', () => {
-        el.currentTime = pathless.state().t || 0;
-    }, { once: true });
-
-    pathless.keybind(
-        k => { if (k === ' ') el.paused ? el.play() : el.pause(); },
-        () => { pathless.update('t', el.currentTime || 0); el.pause(); }
-    );
-})();
-    `, name, name))
-	return f.Build("video", true, video, &css, &js)
-}
+//     pathless.keybind(
+//         k => { if (k === ' ') el.paused ? el.play() : el.pause(); },
+//         () => { pathless.update('t', el.currentTime || 0); el.pause(); }
+//     );
+// })();
+//     `, name, name))
+// 	return f.Build("video", true, video, &css, &js)
+// }
 
 // func Keyboard(f *frame.Frame, asFrame bool) *zero.One {
 // 	css := f.CSS(f.ToString("./keyboard.css"))

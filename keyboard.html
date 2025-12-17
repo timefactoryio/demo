@@ -62,6 +62,8 @@
 
 <script>
 	(function () {
+		const grid = document.querySelector('.grid');
+
 		const svg = (paths = []) => {
 			const p = paths.length
 				? `<path stroke="#00f" stroke-width="10" d="${paths.join(
@@ -83,20 +85,23 @@
 			svg(['M440 10v576M10 298h430']),
 			svg(['M10 298h860M440 10v288']),
 		];
-
-		const grid = document.querySelector('.grid');
 		const indices = {
 			tab: 0,
 			1: 2,
 			2: 3,
 			3: 4,
 			q: 5,
-			w: 6,
 			e: 7,
+			w: 6,
 			a: 8,
 			s: 9,
 			d: 10,
 		};
+
+		Object.entries(indices).forEach(([key, index]) => {
+			const bind = pathless.keyboard()[key];
+			if (bind) bind.index = index;
+		});
 
 		[null, 2, 3, 4, 0, 5, 6, 7, null, 8, 9, 10].forEach((i) => {
 			const key = document.createElement('div');
@@ -109,18 +114,55 @@
 			grid.appendChild(key);
 		});
 
+		let lastFocused = 0;
+		let focusedKeys = new Set();
+
 		const update = () => {
-			pathless.keyboard().forEach(({ key, pressed }) => {
-				const i = indices[key];
-				if (i == null) return;
-				const el = grid.querySelector(`[data-index='${i}']`);
-				if (el) {
-					el.querySelector('.top').textContent = key.toUpperCase();
-					el.classList.toggle('pressed', pressed);
+			const keyboard = pathless.keyboard();
+
+			// Update all keys
+			Object.entries(keyboard).forEach(
+				([key, { onDown, onUp, pressed, index, global }]) => {
+					if (index == null) return;
+					const el = grid.querySelector(`[data-index='${index}']`);
+					if (el) {
+						const hasCallbacks = onDown !== null || onUp !== null;
+
+						// Track non-global keys
+						if (!global && hasCallbacks) {
+							focusedKeys.add(key);
+						}
+
+						el.classList.toggle('pressed', pressed && hasCallbacks);
+						el.querySelector('.top').textContent = hasCallbacks
+							? key.toUpperCase()
+							: '';
+					}
+				}
+			);
+
+			// Clear w/a/s/d keys that aren't in focused space
+			Object.keys(indices).forEach((key) => {
+				const bind = keyboard[key];
+				const index = indices[key];
+				const el = grid.querySelector(`[data-index='${index}']`);
+				if (
+					el &&
+					(!bind || (bind.onDown === null && bind.onUp === null))
+				) {
+					el.classList.remove('pressed');
+					el.querySelector('.top').textContent = '';
+					focusedKeys.delete(key);
 				}
 			});
 		};
+
 		window.addEventListener('input', update);
+		window.addEventListener('sync', () => {
+			// Clear tracked keys on sync
+			focusedKeys.clear();
+			update();
+		});
 		update();
 	})();
 </script>
