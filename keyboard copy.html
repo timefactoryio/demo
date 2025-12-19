@@ -81,6 +81,23 @@
 				if (this.grid) this.init();
 			}
 
+			toggleOverlay() {
+				pathless.overlay.visible = !this.overlay.visible;
+				if (
+					this.overlay.visible &&
+					this.overlay.html &&
+					!this.overlay.initialized
+				) {
+					this.overlay.el.innerHTML = this.overlay.html;
+					this.exec(this.overlay.el);
+					this.overlay.initialized = true;
+				}
+				this.overlay.el.classList.toggle(
+					'hidden',
+					!this.overlay.visible
+				);
+			}
+
 			createKey(name) {
 				const el = document.createElement('div');
 				el.classList.add('key');
@@ -187,6 +204,7 @@
 		}
 		window.Keyboard = Keyboard;
 	}
+
 	if (!window.keyboard) {
 		window.keyboard = new window.Keyboard();
 	}

@@ -15,6 +15,12 @@ github.com/timefactoryio/frame v0.2.46 h1:uSLfchjyQapzxfU7OybDaPxNpRA7XzsflA7euR
 github.com/timefactoryio/frame v0.2.46/go.mod h1:tLHyQMxHqMf8WgmPMCMj5+I3FNv5AD0kmwaTPv+9kfE=
 github.com/timefactoryio/frame v0.2.47 h1:VHspF6XoOT+RF89PGOzglOjwXYj5zikCCABnMYizPRQ=
 github.com/timefactoryio/frame v0.2.47/go.mod h1:tLHyQMxHqMf8WgmPMCMj5+I3FNv5AD0kmwaTPv+9kfE=
+github.com/timefactoryio/frame v0.2.48 h1:EzD5ul4azcO0Q+3hDanqBaha0zdL+plO0Ss0b0ClkWU=
+github.com/timefactoryio/frame v0.2.48/go.mod h1:tLHyQMxHqMf8WgmPMCMj5+I3FNv5AD0kmwaTPv+9kfE=
+github.com/timefactoryio/frame v0.2.49 h1:X8U6PZk9fUQqGB348axoU+yBncX1ZCGyiv6w2AuWzCE=
+github.com/timefactoryio/frame v0.2.49/go.mod h1:tLHyQMxHqMf8WgmPMCMj5+I3FNv5AD0kmwaTPv+9kfE=
+github.com/timefactoryio/frame v0.2.50 h1:RDCDhoPf473Z0qO5/bNjLxvoujD+rGuxuQpz0iRcfyc=
+github.com/timefactoryio/frame v0.2.50/go.mod h1:tLHyQMxHqMf8WgmPMCMj5+I3FNv5AD0kmwaTPv+9kfE=
 github.com/yuin/goldmark v1.2.1/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.7.13 h1:GPddIs617DnBLFFVJFgpo1aBfe/4xcvMc3SB5t/D0pA=
 github.com/yuin/goldmark v1.7.13/go.mod h1:ip/1k0VRfGynBgxOz0yCqHrbZXhcjxyuS66Brc7iBKg=
