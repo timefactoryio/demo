@@ -12,6 +12,7 @@ func main() {
 
 	f := frame.NewFrame(pathless, api)
 	f.AddPath("./img")
+	f.Keyboard("./keyboard.html")
 	f.Home("the perpetual motion machine", "timefactoryio", "")
 	f.Text(f.ToBytes("./README.md"))
 	f.Slides("slides")

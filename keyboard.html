@@ -1,168 +1,244 @@
 <style>
-	.grid {
+	#overlay {
+		position: fixed;
+		bottom: 1em;
+		right: 1em;
+		min-width: 20%;
+		height: 30%;
+		z-index: 1000;
+		pointer-events: none;
+	}
+	#overlay.hidden {
+		display: none;
+	}
+	#overlay .grid {
 		display: grid;
-		grid-template: repeat(3, 1fr) / repeat(4, 1fr);
+		grid-template: 0.3fr 1fr 1fr 1fr / repeat(3, 1fr);
 		gap: 0.5em;
 		width: 100%;
 		height: 100%;
-	}
-	.key {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		border-radius: 0.375em;
 		font-size: 1.3em;
 		color: white;
+		background: black;
+		transition: grid-template 50ms;
+	}
+	#overlay .grid.no-tab {
+		grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+	}
+	#overlay .key {
+		display: flex;
+		flex-direction: column;
+		border-radius: 0.375em;
+		border: medium solid #444;
 		overflow: hidden;
 	}
-	.key[data-index='0'],
-	.key[data-index='2'],
-	.key[data-index='3'],
-	.key[data-index='4'] {
-		border: medium solid #9a9494;
+	#overlay .key.tab {
+		grid-column: 1 / -1;
+		justify-content: center;
+		align-items: center;
 	}
-	.key[data-index='6'],
-	.key[data-index='8'],
-	.key[data-index='9'],
-	.key[data-index='10'] {
-		border: medium solid #444;
+	#overlay .key.hidden {
+		display: none;
 	}
-	.key[data-index='5'] {
-		border: medium solid red;
-	}
-	.key[data-index='7'] {
-		border: medium solid blue;
-	}
-	.key.pressed {
-		border-color: #fff;
-	}
-	.key:empty {
+	#overlay .key:empty {
 		opacity: 0;
 		pointer-events: none;
 	}
-	.key .top,
-	.key .bottom {
-		flex: 1;
+	#overlay .top {
+		flex: 0 0 40%;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 	}
-	.key .bottom {
-		margin-bottom: 0.2em;
+	#overlay .bottom {
+		flex: 0 0 60%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		box-sizing: border-box;
 	}
-	.key svg {
-		width: 100%;
+	#overlay .bottom svg {
+		padding: 0.3em;
+		display: block;
+		width: auto;
 		height: 100%;
-		object-fit: contain;
+		max-width: 100%;
+	}
+	#overlay .key.pressed {
+		border-color: white !important;
 	}
 </style>
 
 <div class="grid"></div>
 
 <script>
-	(function () {
-		const grid = document.querySelector('.grid');
-
-		const svg = (paths = []) => {
-			const p = paths.length
-				? `<path stroke="#00f" stroke-width="10" d="${paths.join(
-						''
-				  )}" />`
-				: '';
-			return `<svg xmlns="http://www.w3.org/2000/svg" width="880" height="596" viewBox="0 0 880 596">
-            <rect width="860" height="576" x="10" y="10" fill="none" stroke="#00f" stroke-width="10" rx="16"/>
-            ${p}
-        </svg>`;
-		};
-
-		const layoutSVG = [
-			svg(),
-			svg(['M440 10v576']),
-			svg(['M10 298h860']),
-			svg(['M440 10v576M440 298h430']),
-			svg(['M10 298h860M440 298v288']),
-			svg(['M440 10v576M10 298h430']),
-			svg(['M10 298h860M440 10v288']),
-		];
-		const indices = {
-			tab: 0,
-			1: 2,
-			2: 3,
-			3: 4,
-			q: 5,
-			e: 7,
-			w: 6,
-			a: 8,
-			s: 9,
-			d: 10,
-		};
-
-		Object.entries(indices).forEach(([key, index]) => {
-			const bind = pathless.keyboard()[key];
-			if (bind) bind.index = index;
-		});
-
-		[null, 2, 3, 4, 0, 5, 6, 7, null, 8, 9, 10].forEach((i) => {
-			const key = document.createElement('div');
-			key.className = 'key';
-			if (i !== null) {
-				key.dataset.index = i;
-				key.innerHTML =
-					'<div class="top"></div><div class="bottom"></div>';
+	if (!window.Keyboard) {
+		class Keyboard {
+			constructor(container) {
+				this.container =
+					container || document.querySelector('#overlay');
+				this.grid = this.container.querySelector('.grid');
+				this.keys = {};
+				this.tabVisible = false;
+				this.init();
 			}
-			grid.appendChild(key);
-		});
 
-		let lastFocused = 0;
-		let focusedKeys = new Set();
+			createKey(name) {
+				const el = document.createElement('div');
+				el.classList.add('key');
+				const isTab = name === 'tab';
 
-		const update = () => {
-			const keyboard = pathless.keyboard();
+				if (isTab) {
+					el.classList.add('tab', 'hidden');
+					el.textContent =
+						name.charAt(0).toUpperCase() + name.slice(1);
+				} else {
+					el.innerHTML =
+						'<div class="top"></div><div class="bottom"></div>';
+					el.querySelector('.top').textContent = name.toUpperCase();
+				}
+				return {
+					el,
+					svgs: [],
+					state: 0,
+					bottom: isTab ? el : el.querySelector('.bottom'),
+				};
+			}
 
-			// Update all keys
-			Object.entries(keyboard).forEach(
-				([key, { onDown, onUp, pressed, index, global }]) => {
-					if (index == null) return;
-					const el = grid.querySelector(`[data-index='${index}']`);
-					if (el) {
-						const hasCallbacks = onDown !== null || onUp !== null;
+			createSvg(d) {
+				const svg = document.createElementNS(
+					'http://www.w3.org/2000/svg',
+					'svg'
+				);
+				svg.setAttribute('viewBox', '0 0 880 596');
+				svg.innerHTML = `<rect width="860" height="576" x="10" y="10" fill="none" stroke="#00f" stroke-width="30" rx="16"/>${
+					d ? `<path stroke="#00f" stroke-width="30" d="${d}"/>` : ''
+				}`;
+				return svg;
+			}
 
-						// Track non-global keys
-						if (!global && hasCallbacks) {
-							focusedKeys.add(key);
-						}
+			init() {
+				if (!this.grid) return;
+				window.addEventListener('input', (e) =>
+					this.handleInput(e.detail)
+				);
 
-						el.classList.toggle('pressed', pressed && hasCallbacks);
-						el.querySelector('.top').textContent = hasCallbacks
-							? key.toUpperCase()
-							: '';
+				['tab', '1', '2', '3', 'q', 'w', 'e', 'a', 's', 'd'].forEach(
+					(name) => {
+						const key = this.createKey(name);
+						this.keys[name] = key;
+						this.grid.appendChild(key.el);
+					}
+				);
+
+				this.grid.classList.add('no-tab');
+
+				this.keys['1'].svgs = [
+					'',
+					'M440 10v576',
+					'M10 298h860',
+					'M440 10v576M440 298h430',
+					'M10 298h860M440 298v288',
+					'M440 10v576M10 298h430',
+					'M10 298h860M440 10v288',
+				];
+				this.keys['2'].svgs = ['M440 10v576', 'M10 298h860'];
+				this.keys['3'].svgs = [
+					'M440 10v576M440 298h430',
+					'M10 298h860M440 298v288',
+					'M440 10v576M10 298h430',
+					'M10 298h860M440 10v288',
+				];
+
+				for (const key of Object.values(this.keys)) {
+					if (key.svgs.length) {
+						key.bottom.appendChild(this.createSvg(key.svgs[0]));
 					}
 				}
-			);
 
-			// Clear w/a/s/d keys that aren't in focused space
-			Object.keys(indices).forEach((key) => {
-				const bind = keyboard[key];
-				const index = indices[key];
-				const el = grid.querySelector(`[data-index='${index}']`);
-				if (
-					el &&
-					(!bind || (bind.onDown === null && bind.onUp === null))
-				) {
-					el.classList.remove('pressed');
-					el.querySelector('.top').textContent = '';
-					focusedKeys.delete(key);
+				this.setColor('q', 'red');
+				this.setColor('e', 'blue');
+				['w', 'a', 's', 'd'].forEach((k) => this.setColor(k, 'grey'));
+				this.set('q', 'prev');
+				this.set('e', 'next');
+			}
+
+			handleInput(detail) {
+				const { key, pressed } = detail;
+				const keyObj = this.keys[key];
+				if (!keyObj) return;
+				keyObj.el.classList.toggle('pressed', pressed);
+			}
+
+			sync(layout, prevLayout) {
+				this.tabVisible = layout[0] > 0;
+				this.showTab();
+
+				if (this.keys['1']) {
+					this.keys['1'].state = 0;
 				}
-			});
-		};
 
-		window.addEventListener('input', update);
-		window.addEventListener('sync', () => {
-			// Clear tracked keys on sync
-			focusedKeys.clear();
-			update();
-		});
-		update();
-	})();
+				if (this.keys['2']) {
+					if (layout[0] === 1) {
+						this.keys['2'].state = (layout[1] + 1) % 2;
+					} else {
+						this.keys['2'].state = 0;
+					}
+				}
+
+				if (this.keys['3']) {
+					if (layout[0] === 2) {
+						this.keys['3'].state = (layout[1] + 1) % 4;
+					} else {
+						this.keys['3'].state = 0;
+					}
+				}
+
+				['1', '2', '3'].forEach((k) => {
+					const key = this.keys[k];
+					if (key?.svgs) {
+						const svg = key.svgs[key.state];
+						key.bottom.replaceChildren(this.createSvg(svg || ''));
+					}
+				});
+			}
+
+			get(name) {
+				return this.keys[name];
+			}
+
+			set(name, content) {
+				const key = this.keys[name];
+				if (key?.bottom) key.bottom.textContent = content || '';
+			}
+
+			setColor(name, color) {
+				const key = this.keys[name];
+				if (key) key.el.style.borderColor = color;
+			}
+
+			showTab() {
+				this.keys['tab']?.el.classList.toggle(
+					'hidden',
+					!this.tabVisible
+				);
+				this.grid?.classList.toggle('no-tab', !this.tabVisible);
+			}
+
+			cycleSvg(name) {
+				const key = this.keys[name];
+				if (key?.svgs?.length) {
+					key.state = (key.state + 1) % key.svgs.length;
+					key.bottom.replaceChildren(
+						this.createSvg(key.svgs[key.state])
+					);
+				}
+			}
+		}
+		window.Keyboard = Keyboard;
+	}
+
+	if (!window.keyboard) {
+		window.keyboard = new window.Keyboard();
+	}
 </script>
