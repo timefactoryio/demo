@@ -9,6 +9,10 @@ github.com/stretchr/testify v1.6.1 h1:hDPOHmpOpP40lSULcqw7IrRb/u7w6RpDC9399XyoNd
 github.com/stretchr/testify v1.6.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
 github.com/timefactoryio/frame v0.2.53 h1:iTfJh3QjOcd1FER8w0tEYx9KYCNu0gA8qtXsQ398G60=
 github.com/timefactoryio/frame v0.2.53/go.mod h1:tLHyQMxHqMf8WgmPMCMj5+I3FNv5AD0kmwaTPv+9kfE=
+github.com/timefactoryio/frame v0.2.54 h1:1FaF5CVeKTT0p3CtrdZVXfxttEQp5HASCjkCPKZ54lo=
+github.com/timefactoryio/frame v0.2.54/go.mod h1:tLHyQMxHqMf8WgmPMCMj5+I3FNv5AD0kmwaTPv+9kfE=
+github.com/timefactoryio/frame v0.2.55 h1:GoVg+zdxC7ZEANcakwPEw5+6c3ULFJbawVyY3AFWQ2Y=
+github.com/timefactoryio/frame v0.2.55/go.mod h1:tLHyQMxHqMf8WgmPMCMj5+I3FNv5AD0kmwaTPv+9kfE=
 github.com/yuin/goldmark v1.2.1/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.7.13 h1:GPddIs617DnBLFFVJFgpo1aBfe/4xcvMc3SB5t/D0pA=
 github.com/yuin/goldmark v1.7.13/go.mod h1:ip/1k0VRfGynBgxOz0yCqHrbZXhcjxyuS66Brc7iBKg=
