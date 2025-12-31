@@ -18,7 +18,12 @@ RUN --mount=type=cache,target=/go/pkg/mod \
 
 # Final stage
 FROM scratch
+WORKDIR /app
 COPY --from=go_builder /out/demo /demo
+
+# Copy static files
+COPY img ./img
+COPY slides ./slides
 
 USER 1001
 ENTRYPOINT ["/demo"]
