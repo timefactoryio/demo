@@ -16,10 +16,15 @@ COPY main.go ./
 RUN --mount=type=cache,target=/go/pkg/mod \
     CGO_ENABLED=0 GOARCH=$TARGETARCH go build -ldflags="-s -w" -o /out/demo .
 
+# Copy CA certificates from builder
+RUN mkdir -p /out/etc/ssl/certs && \
+    cp /etc/ssl/certs/ca-certificates.crt /out/etc/ssl/certs/
+
 # Final stage
 FROM scratch
 WORKDIR /app
 COPY --from=go_builder /out/demo /demo
+COPY --from=go_builder /out/etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
 # Copy static files
 COPY img ./img
