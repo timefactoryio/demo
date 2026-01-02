@@ -13,7 +13,7 @@ func main() {
 	f := frame.NewFrame(pathless, api)
 	f.Reader("./img")
 	f.Home("the perpetual motion machine", "timefactoryio", "")
-	f.Text("https://raw.githubusercontent.com/timefactoryio/pathless/refs/heads/main/README.md")
+	f.README("https://raw.githubusercontent.com/timefactoryio/pathless/refs/heads/main/README.md")
 	f.Slides("slides")
 	f.Start()
 	select {}
