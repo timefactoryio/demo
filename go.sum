@@ -7,8 +7,8 @@ github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZN
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.6.1 h1:hDPOHmpOpP40lSULcqw7IrRb/u7w6RpDC9399XyoNd0=
 github.com/stretchr/testify v1.6.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
-github.com/timefactoryio/frame v0.2.84 h1:F8+h19afil8+Jz/JwuzX0ky1aPEvCNkQFo3E+Xcxy6Y=
-github.com/timefactoryio/frame v0.2.84/go.mod h1:tLHyQMxHqMf8WgmPMCMj5+I3FNv5AD0kmwaTPv+9kfE=
+github.com/timefactoryio/frame v0.3.0 h1:RCRQO+vyXv7ijzVV4Y4sY0L2pcQ8wF/DFosQN+rMNzA=
+github.com/timefactoryio/frame v0.3.0/go.mod h1:tLHyQMxHqMf8WgmPMCMj5+I3FNv5AD0kmwaTPv+9kfE=
 github.com/yuin/goldmark v1.2.1/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.7.16 h1:n+CJdUxaFMiDUNnWC3dMWCIQJSkxH4uz3ZwQBkAlVNE=
 github.com/yuin/goldmark v1.7.16/go.mod h1:ip/1k0VRfGynBgxOz0yCqHrbZXhcjxyuS66Brc7iBKg=
