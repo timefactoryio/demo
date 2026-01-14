@@ -1,0 +1,55 @@
+name: zero
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    runs-on: [self-hosted, linux, x64]
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Determine version type
+        id: version_type
+        run: |
+          TAG=${GITHUB_REF#refs/tags/v}
+          if [[ $TAG =~ ^[0-9]+\.[0-9]+\.[1-9][0-9]*$ ]]; then
+            echo "type=patch" >> $GITHUB_OUTPUT
+          else
+            echo "type=release" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+
+      - name: Build and push Docker image (patch)
+        if: steps.version_type.outputs.type == 'patch'
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          platforms: linux/amd64
+          tags: docker.io/timefactory/${{ github.event.repository.name }}:dev
+
+      - name: Build and push Docker image (minor/major)
+        if: steps.version_type.outputs.type == 'release'
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          platforms: linux/amd64,linux/arm64,linux/arm/v7
+          tags: |
+            docker.io/timefactory/${{ github.event.repository.name }}:${GITHUB_REF#refs/tags/}
+            docker.io/timefactory/${{ github.event.repository.name }}:latest

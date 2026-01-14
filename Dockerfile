@@ -5,14 +5,13 @@ WORKDIR /src
 ARG TARGETARCH
 
 # Copy only go.mod and go.sum for dependency resolution
-COPY go.mod go.sum ./
+COPY main.go go.mod go.sum ./
 
 # Cache Go modules
 RUN --mount=type=cache,target=/go/pkg/mod \
     go mod download
 
-# Copy main.go and build the binary
-COPY main.go ./
+# build the binary
 RUN --mount=type=cache,target=/go/pkg/mod \
     CGO_ENABLED=0 GOARCH=$TARGETARCH go build -ldflags="-s -w" -o /out/demo .
 
