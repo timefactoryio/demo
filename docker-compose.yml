@@ -15,9 +15,9 @@ services:
     ports:
       - 127.0.0.1:1001:1001
     volumes:
-      - ./one:/
+      - ./one:/one
     environment:
-      - logo=/logo.svg
+      - logo=/one/logo.svg
       - heading=the perpetual motion machine
-      - slides=/slides
+      - slides=/one/slides
       - text=https://raw.githubusercontent.com/timefactoryio/pathless/refs/heads/main/README.md
