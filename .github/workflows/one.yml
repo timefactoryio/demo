@@ -1,12 +1,19 @@
-name: one
+name: zero
 
 on:
-  push:
-    tags:
-      - "v*"
+  workflow_dispatch:
+    inputs:
+      version_bump:
+        description: "Version bump (patch, minor, major)"
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
 
 jobs:
-  build:
+  tag:
     runs-on: [self-hosted, linux, x64]
     permissions:
       contents: write
@@ -15,15 +22,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Determine version type
-        id: version_type
-        run: |
-          TAG=${GITHUB_REF#refs/tags/v}
-          if [[ $TAG =~ ^[0-9]+\.[0-9]+\.[1-9][0-9]*$ ]]; then
-            echo "type=patch" >> $GITHUB_OUTPUT
-          else
-            echo "type=release" >> $GITHUB_OUTPUT
-          fi
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          default_bump: ${{ inputs.version_bump }}
+          tag_prefix: v
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -35,7 +40,7 @@ jobs:
           password: ${{ secrets.DOCKER_TOKEN }}
 
       - name: Build and push Docker image (patch)
-        if: steps.version_type.outputs.type == 'patch'
+        if: inputs.version_bump == 'patch'
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -44,12 +49,12 @@ jobs:
           tags: docker.io/timefactory/${{ github.event.repository.name }}:dev
 
       - name: Build and push Docker image (minor/major)
-        if: steps.version_type.outputs.type == 'release'
+        if: inputs.version_bump == 'minor' || inputs.version_bump == 'major'
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           tags: |
-            docker.io/timefactory/${{ github.event.repository.name }}:${GITHUB_REF#refs/tags/}
+            docker.io/timefactory/${{ github.event.repository.name }}:${{ steps.tag_version.outputs.new_tag }}
             docker.io/timefactory/${{ github.event.repository.name }}:latest
