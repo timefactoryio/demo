@@ -7,10 +7,15 @@ import (
 )
 
 func main() {
+	logo := os.Getenv("logo")
+	heading := os.Getenv("heading")
+	text := os.Getenv("text")
+	slides := os.Getenv("slides")
+
 	f := frame.NewFrame()
-	f.Home("./logo.svg", "the perpetual motion machine")
-	f.Text("https://raw.githubusercontent.com/timefactoryio/pathless/refs/heads/main/README.md")
-	f.Slides("slides")
-	f.Start(os.Getenv("PATHLESS_URL"))
+	f.Home(logo, heading)
+	f.Text(text)
+	f.Slides(slides)
+	f.Start("")
 	select {}
 }
