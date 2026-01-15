@@ -1,8 +1,7 @@
 services:
   pathless-demo:
-    image: timefactory/pathless:dev
+    image: timefactory/pathless
     container_name: pathless-demo
-    restart: unless-stopped
     pull_policy: always
     networks:
       - pathless
@@ -10,9 +9,8 @@ services:
       - 127.0.0.1:1000:1000
 
   frame-demo:
-    image: timefactory/demo:dev
+    image: timefactory/demo
     container_name: frame-demo
-    restart: unless-stopped
     pull_policy: always
     networks:
       - pathless
@@ -20,10 +18,9 @@ services:
       - 127.0.0.1:1001:1001
     volumes:
       - ./slides:/slides
-      - ./timefactory.svg:/timefactory.svg
+      - ./timefactory.svg:/logo.svg
     environment:
-      - PATHLESS=http://pathless-demo:1000
-      - LOGO_PATH=/timefactory.svg
+      - LOGO_PATH=/logo.svg
       - HEADING=the perpetual motion machine
       - TEXT_URL=https://raw.githubusercontent.com/timefactoryio/pathless/refs/heads/main/README.md
       - SLIDES_PATH=/slides

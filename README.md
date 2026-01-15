@@ -1,16 +1,17 @@
 # pathless
 
+testing!
+
 ![layouts](https://raw.githubusercontent.com/timefactoryio/pathless/main/content/layout.gif)
 
-### **pathless** is a closed system. 
+#### **pathless** is a closed system. 
 
-### **pathless** is a viewport allocator
+#### **pathless** is a viewport allocator
 
-| Key | Action         | Toggle |
-| --- | -------------- | ------ |
-| `q` | previous frame |        |
-| `e` | next frame     |        |
-
+| Key | Action         |
+| --- | -------------- |
+| `q` | previous frame |
+| `e` | next frame     |
 
 establishes a universal interface with
 
@@ -29,8 +30,6 @@ establishes a universal interface with
 | `Tab` | Cycle focus | panel zero -> one -> two                   |
 
 When in a multipanel layout, press `1` to make the focused panel fullscreen, press `1` again to return to the previous layout. Press `2` to toggle between side-by-side (vertical split) and stacked (horizontal split). Press `3` to cycle through 50/25/25 layouts.
-
-![nav](https://raw.githubusercontent.com/timefactoryio/pathless/main/content/nav.gif)
 
 ## Documentation
 
