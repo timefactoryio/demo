@@ -4,6 +4,8 @@ services:
     container_name: pathless-demo
     restart: unless-stopped
     pull_policy: always
+    networks:
+      - pathless
     ports:
       - 127.0.0.1:1000:1000
 
@@ -12,12 +14,20 @@ services:
     container_name: frame-demo
     restart: unless-stopped
     pull_policy: always
+    networks:
+      - pathless
     ports:
       - 127.0.0.1:1001:1001
     volumes:
-      - ./one:/one
+      - ./slides:/slides
+      - ./timefactory.svg:/timefactory.svg
     environment:
-      - logo=/one/logo.svg
-      - heading=the perpetual motion machine
-      - slides=/one/slides
-      - text=https://raw.githubusercontent.com/timefactoryio/pathless/refs/heads/main/README.md
+      - PATHLESS=http://pathless-demo:1000
+      - LOGO_PATH=/timefactory.svg
+      - HEADING=the perpetual motion machine
+      - TEXT_URL=https://raw.githubusercontent.com/timefactoryio/pathless/refs/heads/main/README.md
+      - SLIDES_PATH=/slides
+
+networks:
+  pathless:
+    driver: bridge

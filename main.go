@@ -7,15 +7,10 @@ import (
 )
 
 func main() {
-	logo := os.Getenv("logo")
-	heading := os.Getenv("heading")
-	text := os.Getenv("text")
-	slides := os.Getenv("slides")
-
 	f := frame.NewFrame()
-	f.Home(logo, heading)
-	f.Text(text)
-	f.Slides(slides)
-	f.Start("")
+	f.Home(os.Getenv("LOGO_PATH"), os.Getenv("HEADING"))
+	f.Text(os.Getenv("TEXT_URL"))
+	f.Slides(os.Getenv("SLIDES_PATH"))
+	f.Start(os.Getenv("PATHLESS"))
 	select {}
 }
