@@ -25,7 +25,7 @@ WORKDIR /app
 COPY --from=go_builder /out/demo /demo
 COPY --from=go_builder /out/etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
-COPY ./timefactory.svg /logo.svg
+COPY ./timefactory.svg /timefactory.svg
 COPY ./slides /slides
 
 USER 1001
