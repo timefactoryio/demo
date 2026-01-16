@@ -111,3 +111,21 @@ See [`docker-compose.yml`](pathless/docker-compose.yml) in the factory workspace
 ## License
 
 See individual project licenses.
+
+
+```go
+package main
+
+import (
+	"github.com/timefactoryio/frame"
+)
+
+func main() {
+	f := frame.NewFrame()
+	f.Home("/timefactory.svg", "the perpetual motion machine")
+	f.Text("https://raw.githubusercontent.com/timefactoryio/pathless/refs/heads/main/README.md")
+	f.Slides("/slides")
+	f.Start("")
+	select {}
+}
+```

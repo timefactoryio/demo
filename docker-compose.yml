@@ -1,6 +1,6 @@
 services:
   pathless-demo:
-    image: timefactory/pathless
+    image: timefactory/pathless:demo
     container_name: pathless-demo
     pull_policy: always
     networks:
