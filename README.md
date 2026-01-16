@@ -1,84 +1,113 @@
-# pathless
+# demo
 
-testing!
+A demonstration application for the [frame](https://github.com/timefactoryio/frame) system that showcases dynamic content rendering in the [pathless](https://github.com/timefactoryio/pathless) viewport allocator.
 
-![layouts](https://raw.githubusercontent.com/timefactoryio/pathless/main/content/layout.gif)
+## Overview
 
-#### **pathless** is a closed system. 
+This app serves three types of frames:
+- **Home**: A custom landing page with logo and heading
+- **Text**: Markdown content rendered from a URL or file
+- **Slides**: An image slideshow from a directory
 
-#### **pathless** is a viewport allocator
+## Quick Start
 
-| Key | Action         |
-| --- | -------------- |
-| `q` | previous frame |
-| `e` | next frame     |
+### Using Docker Compose
 
-establishes a universal interface with
+The easiest way to run the demo:
 
- - `space`: in the system
- - `frame`: objects in space 
+```bash
+docker compose up
+```
 
-`frame`'s are a finite pool of simulataneously observable content, cached after first fetch. 
+This starts both services:
+- **pathless** on `http://localhost:1000` (the viewport interface)
+- **demo** on `http://localhost:1001` (the frame server)
 
-## Getting Started
+### Environment Variables
 
-| Key   | Action      | Toggle                                     |
-| ----- | ----------- | ------------------------------------------ |
-| `1`   | One panel   | fullscreen <-> previous layout             |
-| `2`   | Two panel   | horizontal <-> vertical                    |
-| `3`   | Three panel | large panel left -> top -> right -> bottom |
-| `Tab` | Cycle focus | panel zero -> one -> two                   |
+Configure the app using environment variables:
 
-When in a multipanel layout, press `1` to make the focused panel fullscreen, press `1` again to return to the previous layout. Press `2` to toggle between side-by-side (vertical split) and stacked (horizontal split). Press `3` to cycle through 50/25/25 layouts.
+| Variable      | Description                           | Default                 |
+| ------------- | ------------------------------------- | ----------------------- |
+| `LOGO_PATH`   | Path to SVG logo file                 | -                       |
+| `HEADING`     | Text displayed on home frame          | -                       |
+| `TEXT_URL`    | URL or file path for markdown content | -                       |
+| `SLIDES_PATH` | Directory containing slide images     | -                       |
+| `PATHLESS`    | URL of pathless instance              | `http://localhost:1000` |
 
-## Documentation
+### Example Configuration
 
-The `window.pathless` object provides the API coordinating between `panels`, `frames`, and `state`.    
+From [`docker-compose.yml`](docker-compose.yml):
 
-#### `pathless.context()`
-Returns the DOM element of the focused panel, DOM element of the current frame, and panel specifasdasdasdic frame state.
+```yaml
+environment:
+  - LOGO_PATH=/logo.svg
+  - HEADING=the perpetual motion machine
+  - TEXT_URL=https://raw.githubusercontent.com/timefactoryio/pathless/refs/heads/main/README.md
+  - SLIDES_PATH=/slides
+```
 
-#### `pathless.fetch(url, opts)`  
-Returns the parsed response `{ data, headers }`. Caching and request deduplication available using `opts.key` where a single successful round-trip makes a `value` available to all panels.
+## Development
 
-#### `pathless.onKey(handler)`
-Event handler used to register `frame` keybinds, automatically scoped to the focused panel.
+### Prerequisites
 
-#### `pathless.update(key, value)`
-Key-value pair's used to persist state through layout changes and navigation, automatically scoped to the `frame` of the focused `panel`.
+- Go 1.25.6+
+- Docker (optional)
 
-### Architecture
+### Building from Source
 
-**pathless** builds, then minifies, then compresses HTML once at startup. then serves it from memory with maximum efficiency. 
+```bash
+go build -o demo
+./demo
+```
 
-**Server responsibilities:**
-- Client delivery
-- Redirect all non-root paths to `/`
-
-**Client responsibilities:**
-- Fetch frames from a configurable API endpoint
-- Manage multi-panel layouts with keyboard navigation
-- Cache frames and deduplicate requests
-- Provide state management for loaded frames
-
-## What It Does
-
-Pathless is a lightweight web server that:
-
-1. **Builds template** with Title, ApiUrl, and Favicon environment values
-2. **Minifies the HTML** by removing comments, whitespace, and newlines
-3. **Compresses with gzip** for optimal transfer size
-4. **Serves from memory** - All processing happens **once** during initialization. 
-
-### Client (JavaScript)
+### Project Structure
 
 ```
-┌──────────┐    ┌──────────┐    ┌──────────┐
-│   One    │───▶│    Fx    │───▶│   Zero   │
-│Controller│    │  Layout  │    │  Cache   │
-└──────────┘    └──────────┘    └──────────┘
-     │               │                │
-     │               │                │
-  Keyboard      Panel State      HTTP Fetch
-  Events        Management       & Caching
+demo/
+├── main.go              # Application entry point
+├── slides/              # Image directory for slideshow
+│   └── sort.json        # Optional: defines slide order
+├── timefactory.svg      # Logo file
+├── Dockerfile           # Multi-stage build
+└── docker-compose.yml   # Local development setup
 ```
+
+### Slides Configuration
+
+Place images in the slides directory. Optionally create [`sort.json`](slides/sort.json) to define display order:
+
+```json
+["first", "second", "third"]
+```
+
+File names should match (without extension).
+
+## Usage with Pathless
+
+Once running, open `http://localhost:1000` in your browser.
+
+### Keyboard Controls
+
+| Key   | Action                                        |
+| ----- | --------------------------------------------- |
+| `q`   | Previous frame                                |
+| `e`   | Next frame                                    |
+| `1`   | Toggle fullscreen                             |
+| `2`   | Two panel layout (toggle horizontal/vertical) |
+| `3`   | Three panel layout (cycle positions)          |
+| `Tab` | Cycle focus between panels                    |
+| `z`   | Show keyboard overlay                         |
+
+## Deployment
+
+See [`docker-compose.yml`](pathless/docker-compose.yml) in the factory workspace for production deployment with Traefik reverse proxy.
+
+## Related Projects
+
+- [pathless](https://github.com/timefactoryio/pathless) - Viewport allocator
+- [frame](https://github.com/timefactoryio/frame) - Frame generation system
+
+## License
+
+See individual project licenses.
