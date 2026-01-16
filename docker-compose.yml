@@ -9,21 +9,13 @@ services:
       - 127.0.0.1:1000:1000
 
   frame-demo:
-    image: timefactory/demo:dev
+    image: timefactory/demo
     container_name: frame-demo
     pull_policy: always
     networks:
       - pathless
     ports:
       - 127.0.0.1:1001:1001
-    # volumes:
-    #   - ./slides:/slides
-    #   - ./timefactory.svg:/logo.svg
-    # environment:
-    #   - LOGO_PATH=/logo.svg
-    #   - HEADING=the perpetual motion machine
-    #   - TEXT_URL=https://raw.githubusercontent.com/timefactoryio/pathless/refs/heads/main/README.md
-    #   - SLIDES_PATH=/slides
 
 networks:
   pathless:
