@@ -6,6 +6,7 @@ import (
 	"github.com/timefactoryio/frame"
 )
 
+// needs ./ infront of paths for local go run main.go
 func main() {
 	f := frame.NewFrame()
 	f.Home("/timefactory.svg", "the perpetual motion machine")
