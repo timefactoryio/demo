@@ -9,9 +9,10 @@ import (
 // needs ./ infront of paths for local go run main.go
 func main() {
 	f := frame.NewFrame()
-	f.Home("/timefactory.svg", "the perpetual motion machine")
+	f.Home("./timefactory.svg", "the perpetual motion machine")
 	f.Text("https://raw.githubusercontent.com/timefactoryio/pathless/refs/heads/main/README.md")
-	f.Slides("/slides")
-	f.Start(os.Getenv("PATHLESS"))
+	f.Slides("./slides")
+	// f.Start(os.Getenv("PATHLESS"))
+	f.StartTest(os.Getenv("PATHLESS"), "./keyboard.html")
 	select {}
 }
