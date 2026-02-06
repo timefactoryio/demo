@@ -1,8 +1,8 @@
 module github.com/timefactoryio/demo
 
-go 1.25.6
+go 1.25.7
 
-require github.com/timefactoryio/frame v0.4.17
+require github.com/timefactoryio/frame v0.4.34
 
 require (
 	github.com/litao91/goldmark-mathjax v0.0.0-20210217064022-a43cf739a50f // indirect
