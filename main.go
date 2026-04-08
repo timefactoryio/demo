@@ -6,12 +6,11 @@ import (
 	"github.com/timefactoryio/frame"
 )
 
-// needs ./ infront of paths for local go run main.go
 func main() {
 	f := frame.NewFrame()
-	f.Home("/timefactory.svg", "the perpetual motion machine")
-	f.Text("https://raw.githubusercontent.com/timefactoryio/pathless/refs/heads/main/README.md")
-	f.Slides("/slides")
+	f.Home(os.Getenv("LOGO"), os.Getenv("TITLE"))
+	f.Text(os.Getenv("TEXT"))
+	f.Slides(os.Getenv("SLIDES"))
 	f.Start(os.Getenv("PATHLESS"))
 	select {}
 }
