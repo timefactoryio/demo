@@ -12,6 +12,8 @@ github.com/timefactoryio/frame v0.5.2 h1:yhI/1T4aZ253cLchkcxYuifxB9Yn9vG6IUA4sp7
 github.com/timefactoryio/frame v0.5.2/go.mod h1:yMAB54vD0Ivljxr3rLPId3MdSsN5xsygJIX8kx6t04c=
 github.com/timefactoryio/frame v0.5.3 h1:dtg/FkhlZQmYqZea0Xbs4dh6J+lSjItNOCk/3imlK38=
 github.com/timefactoryio/frame v0.5.3/go.mod h1:yMAB54vD0Ivljxr3rLPId3MdSsN5xsygJIX8kx6t04c=
+github.com/timefactoryio/frame v0.5.4 h1:1Z6mmoTrsN3ber//VCi4DBSBHPKkTwNMEGbr+A4ZH/M=
+github.com/timefactoryio/frame v0.5.4/go.mod h1:yMAB54vD0Ivljxr3rLPId3MdSsN5xsygJIX8kx6t04c=
 github.com/yuin/goldmark v1.2.1/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.8.2 h1:kEGpgqJXdgbkhcOgBxkC0X0PmoPG1ZyoZ117rDVp4zE=
 github.com/yuin/goldmark v1.8.2/go.mod h1:ip/1k0VRfGynBgxOz0yCqHrbZXhcjxyuS66Brc7iBKg=
